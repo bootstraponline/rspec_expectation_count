@@ -1,23 +1,6 @@
-require 'rubygems'
-require 'rspec'
-require 'rspec/matchers'
-require 'rspec/expectations/handler'
-require 'rspec/core/formatters/base_text_formatter'
-require 'rspec/expectations/expectation_target'
-# https://github.com/rspec/rspec-core/issues/740
-
 unless ::RSpec::Expectations.respond_to?(:expectation_count)
   module RSpec
     module Expectations
-      class ExpectationTarget
-        alias_method :old_initialize, :initialize
-
-        def initialize(*args)
-          old_initialize(*args)
-          ::RSpec::Expectations.update_expectation_count
-        end
-      end
-
       class << self
         def expectation_count
           @expectation_count ||= 0
@@ -29,16 +12,29 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
 
         def expectation_debug
         end
+
+        def update_expectation_debug
+        end
       end # class << self
 
       # with waiting rspec matchers, it's not sufficient to just count
-      # the amount of times an expectation is handled. instead we need to
-      # dedupe and count each expectation exactly once (exluding retries)
+      # the amount of times an expectation is handled. Instead we need to
+      # count at the level of the `WaitingRspecMatchers` abstraction.
       #
-      # this logic relies on trace points so it's handled in the optional
-      # expectation_debug.rb file
-      # class PositiveExpectationHandler
-      # class NegativeExpectationHandler
+      # from rspec's perspective the expect logic is invoked multiple times
+      # which leads to duplicates if we count at the rspec level.
+    end
+  end
+
+  module WaitingRspecMatchers
+    class Become
+      alias_method :old_match_helper, :match_helper
+
+      def match_helper(*args, &block)
+        ::RSpec::Expectations.update_expectation_count
+        ::RSpec::Expectations.update_expectation_debug
+        old_match_helper(*args, &block)
+      end
     end
   end
 
