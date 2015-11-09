@@ -3,7 +3,7 @@ require 'rspec'
 require 'rspec/matchers'
 require 'rspec/expectations/handler'
 require 'rspec/core/formatters/base_text_formatter'
-
+require 'pry'
 # https://github.com/rspec/rspec-core/issues/740
 
 unless ::RSpec::Expectations.respond_to?(:expectation_count)
@@ -15,6 +15,12 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
         end
 
         attr_writer :expectation_count
+
+        def update_expectation_debug
+        end
+
+        def expectation_debug
+        end
       end
 
       class PositiveExpectationHandler
@@ -22,6 +28,7 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
           alias_method :old_handle_matcher, :handle_matcher
 
           def handle_matcher(*args)
+            ::RSpec::Expectations.update_expectation_debug
             ::RSpec::Expectations.expectation_count += 1
             old_handle_matcher(*args)
           end
@@ -33,6 +40,7 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
           alias_method :old_handle_matcher, :handle_matcher
 
           def handle_matcher(*args)
+            ::RSpec::Expectations.update_expectation_debug
             ::RSpec::Expectations.expectation_count += 1
             old_handle_matcher(*args)
           end
@@ -53,6 +61,7 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
             count  = ::RSpec::Expectations.expectation_count
             plural = count == 1 ? '' : 's'
             output.puts "#{count} expectation#{plural}"
+            output.puts ::RSpec::Expectations.expectation_debug
           end
         end
       end
