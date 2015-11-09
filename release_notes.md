@@ -1,3 +1,11 @@
+#### v0.0.4 2015-11-09
+
+- [6479112](https://github.com/bootstraponline/rspec_expectation_count/commit/64791121d66302fba64d2c526d12e0c9798dfb5f) Release 0.0.4
+- [6352584](https://github.com/bootstraponline/rspec_expectation_count/commit/63525847cc56f144dccd863429f8eba12cf51815) Clean up code
+- [4ba752a](https://github.com/bootstraponline/rspec_expectation_count/commit/4ba752a98b0fef9cd6a787e3749f410b74ee9b7b) Fix expectation dedupe detection
+- [17c2bd6](https://github.com/bootstraponline/rspec_expectation_count/commit/17c2bd60d89d38847ef8aec71aac0ff314d3e109) Track expects outside specs
+
+
 #### v0.0.3 2015-11-09
 
 - [ba31882](https://github.com/bootstraponline/rspec_expectation_count/commit/ba3188209ee245ecc42f7eb2963ebc9d754cd134) Release 0.0.3
