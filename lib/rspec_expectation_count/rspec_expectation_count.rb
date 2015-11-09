@@ -13,22 +13,26 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
           @expectation_count ||= 0
         end
 
-        attr_writer :expectation_count
-
-        def update_expectation_debug
+        def update_expectation_count
+          @expectation_count = (@expectation_count||0) + 1
         end
 
         def expectation_debug
         end
       end
 
+      # with waiting rspec matchers, it's not sufficient to just count
+      # the amount of times an expectation is handled. instead we need to
+      # dedupe and count each expectation exactly once (exluding retries)
+      #
+      # this logic relies on trace points so it's handled in the optional
+      # expectation_debug.rb file
       class PositiveExpectationHandler
         class << self
           alias_method :old_handle_matcher, :handle_matcher
 
           def handle_matcher(*args)
-            ::RSpec::Expectations.update_expectation_debug
-            ::RSpec::Expectations.expectation_count += 1
+            ::RSpec::Expectations.update_expectation_count
             old_handle_matcher(*args)
           end
         end
@@ -39,8 +43,7 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
           alias_method :old_handle_matcher, :handle_matcher
 
           def handle_matcher(*args)
-            ::RSpec::Expectations.update_expectation_debug
-            ::RSpec::Expectations.expectation_count += 1
+            ::RSpec::Expectations.update_expectation_count
             old_handle_matcher(*args)
           end
         end

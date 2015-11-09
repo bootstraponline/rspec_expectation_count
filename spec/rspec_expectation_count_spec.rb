@@ -27,4 +27,9 @@ describe 'rspec expectation count' do
 
     expect(output).to match expected
   end
+
+  it 'dedupes expects correctly' do
+    output = `rspec spec3/dupe_spec.rb`
+    expect(output).to match '5 expectations'
+  end
 end

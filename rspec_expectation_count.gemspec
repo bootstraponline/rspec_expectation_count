@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'thor', '>= 0.19.1'
   s.add_development_dependency 'pry', '>= 0.10.3'
   s.add_development_dependency 'rubocop', '~> 0.35.0'
+  s.add_development_dependency 'waiting_rspec_matchers', '~> 0.3'
 
   s.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
