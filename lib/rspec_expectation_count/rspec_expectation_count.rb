@@ -14,7 +14,7 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
         end
 
         def update_expectation_count
-          @expectation_count = (@expectation_count||0) + 1
+          @expectation_count = expectation_count + 1
         end
 
         def expectation_debug

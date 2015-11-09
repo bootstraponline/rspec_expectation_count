@@ -23,7 +23,7 @@ unless ::RSpec::Expectations.expectation_debug.is_a?(Array)
             end
 
             line = IO.readlines(file_path)[line_number - 1]
-            if line.match /expect\s*[\{\(]/ # expect () || expect { }
+            if line.match(/expect\s*[\{\(]/) # expect () || expect { }
               expect_hash                          = { file: file_path, line: line.strip, line_number: line_number }
               ::RSpec::Expectations.last_expect    = ::RSpec::Expectations.current_expect
               ::RSpec::Expectations.current_expect = expect_hash
@@ -35,7 +35,7 @@ unless ::RSpec::Expectations.expectation_debug.is_a?(Array)
           # if we've previously seen the expect and haven't advanced to the next spec line
           # then it's most likely a duplicate execution.
           return if (current_expect == last_expect) && (last_spec_line == current_spec_line)
-          @expectation_count = (@expectation_count||0) + 1
+          @expectation_count = expectation_count + 1
           update_expectation_debug
         end
 
