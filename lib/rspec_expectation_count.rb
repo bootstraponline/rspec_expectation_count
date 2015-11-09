@@ -1,0 +1,3 @@
+require_relative 'rspec_expectation_count/rspec_expectation_count'
+require_relative 'rspec_expectation_count/version'
+
