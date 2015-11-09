@@ -1,7 +1,6 @@
 require_relative 'lib/rspec_expectation_count/version'
 
 # rubocop:disable Style/SpaceAroundOperators
-# rubocop:disable Metrics/LineLength
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.2.3'
