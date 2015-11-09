@@ -3,7 +3,6 @@ require 'rspec'
 require 'rspec/matchers'
 require 'rspec/expectations/handler'
 require 'rspec/core/formatters/base_text_formatter'
-require 'pry'
 # https://github.com/rspec/rspec-core/issues/740
 
 unless ::RSpec::Expectations.respond_to?(:expectation_count)

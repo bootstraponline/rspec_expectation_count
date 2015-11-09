@@ -1,5 +1,3 @@
-require 'pry'
-
 describe 'rspec expectation count' do
   it 'prints an expectation count' do
     output = `rspec spec2/count_spec.rb`
