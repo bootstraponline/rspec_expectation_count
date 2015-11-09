@@ -3,11 +3,21 @@ require 'rspec'
 require 'rspec/matchers'
 require 'rspec/expectations/handler'
 require 'rspec/core/formatters/base_text_formatter'
+require 'rspec/expectations/expectation_target'
 # https://github.com/rspec/rspec-core/issues/740
 
 unless ::RSpec::Expectations.respond_to?(:expectation_count)
   module RSpec
     module Expectations
+      class ExpectationTarget
+        alias_method :old_initialize, :initialize
+
+        def initialize(*args)
+          old_initialize(*args)
+          ::RSpec::Expectations.update_expectation_count
+        end
+      end
+
       class << self
         def expectation_count
           @expectation_count ||= 0
@@ -19,7 +29,7 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
 
         def expectation_debug
         end
-      end
+      end # class << self
 
       # with waiting rspec matchers, it's not sufficient to just count
       # the amount of times an expectation is handled. instead we need to
@@ -27,31 +37,12 @@ unless ::RSpec::Expectations.respond_to?(:expectation_count)
       #
       # this logic relies on trace points so it's handled in the optional
       # expectation_debug.rb file
-      class PositiveExpectationHandler
-        class << self
-          alias_method :old_handle_matcher, :handle_matcher
-
-          def handle_matcher(*args)
-            ::RSpec::Expectations.update_expectation_count
-            old_handle_matcher(*args)
-          end
-        end
-      end
-
-      class NegativeExpectationHandler
-        class << self
-          alias_method :old_handle_matcher, :handle_matcher
-
-          def handle_matcher(*args)
-            ::RSpec::Expectations.update_expectation_count
-            old_handle_matcher(*args)
-          end
-        end
-      end
+      # class PositiveExpectationHandler
+      # class NegativeExpectationHandler
     end
   end
 
-  # Print expectation count by default via base text formatter dump_summary
+# Print expectation count by default via base text formatter dump_summary
   module RSpec
     module Core
       module Formatters
